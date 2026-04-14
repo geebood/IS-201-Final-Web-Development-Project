@@ -1,0 +1,75 @@
+.section-title {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+}
+
+.highlight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+}
+
+.highlight-card,
+.profile-panel,
+.resume-section {
+    background: #ffffff;
+    border: 1px solid rgba(24, 37, 52, 0.1);
+    border-radius: 18px;
+    padding: 1.5rem;
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+    margin-bottom: 1.5rem;
+}
+
+.resume-list li {
+    margin-bottom: 0.55rem;
+}
+
+.resume-meta {
+    color: #6c757d;
+    font-family: "Open Sans", Arial, sans-serif;
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+}
+
+.resume-entry + .resume-entry {
+    margin-top: 1.5rem;
+}
+
+.skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.skill-chip {
+    background: #e6f3f6;
+    color: #0d4d5d;
+    border-radius: 999px;
+    padding: 0.55rem 0.9rem;
+    font-family: "Open Sans", Arial, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.footer-links a {
+    color: #495057;
+    font-family: "Open Sans", Arial, sans-serif;
+    font-weight: 700;
+}
+
+.footer-links a:hover {
+    color: #0085a1;
+}
+
+.masthead .site-heading,
+.masthead .page-heading {
+    padding: 12rem 0 10rem;
+}
+
+@media (max-width: 768px) {
+    .highlight-card,
+    .profile-panel,
+    .resume-section {
+        padding: 1.25rem;
+    }
+}

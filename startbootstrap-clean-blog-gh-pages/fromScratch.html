@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A custom scratch-built page about mountain landscapes with original HTML and CSS." />
+    <title>From Scratch | Mountain Light</title>
+    <link rel="stylesheet" href="css/scratch.css" />
+</head>
+<body>
+    <div class="page-shell" id="top">
+        <div class="hero-block">
+            <div class="hero-copy">
+                <p class="eyebrow">From-Scratch Page</p>
+                <h1>Mountain Light</h1>
+                <p>This page was built from a blank HTML file without using the Bootstrap theme content. It focuses on why mountain landscapes are compelling: they combine challenge, calm, and a strong sense of place.</p>
+                <div class="hero-links">
+                    <a href="index.html">Back to Professional Site</a>
+                    <a href="app.html">Open the Web App</a>
+                    <a href="#tableau-section">Jump to Tableau</a>
+                </div>
+            </div>
+        </div>
+        <div class="content-grid">
+            <div class="info-card">
+                <h2>Why Mountains Matter</h2>
+                <p>Mountains create memorable experiences because they demand attention. Weather changes quickly, views open up with elevation, and even short hikes can feel like a reset from everyday routine.</p>
+                <ol>
+                    <li>
+                        Reasons I enjoy mountain environments
+                        <ul>
+                            <li>Big visual contrast between sky, rock, trees, and snow</li>
+                            <li>Built-in challenge through distance, elevation, and planning</li>
+                            <li>Quiet settings that make it easier to think and recharge</li>
+                        </ul>
+                    </li>
+                    <li>They pair well with photography, trail running, and weekend travel</li>
+                    <li>They make data stories about weather and geography more interesting</li>
+                </ol>
+            </div>
+            <div class="photo-card">
+                <h2>Featured Image</h2>
+                <img src="assets/img/mountain-badge.svg" alt="Custom illustrated mountain badge with sun, peaks, and trees" />
+                <p>This custom image was added specifically for the scratch page so the page includes original media beyond the Bootstrap theme assets.</p>
+            </div>
+        </div>
+        <div class="media-row">
+            <div class="video-card">
+                <h2>Mountain Film Inspiration</h2>
+                <div class="video-frame">
+                    <iframe
+                        src="https://www.youtube.com/embed/Scxs7L0vhZ4?si=1CzNwI4l6hSgcLz6"
+                        title="YouTube video player"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen
+                    ></iframe>
+                </div>
+            </div>
+            <div class="notes-card">
+                <h2>Quick Notes</h2>
+                <p>Good mountain trips usually depend on preparation more than luck. Packing layers, checking forecasts, and planning turnaround times can make the experience far better.</p>
+                <p>If you want more interaction, the custom web app linked from this page lets you build a day plan for an outdoor trip.</p>
+                <a class="anchor-link" href="#top">Back to top</a>
+            </div>
+        </div>
+        <div class="tableau-card" id="tableau-section">
+            <h2>Interactive Tableau Visualization</h2>
+            <p>This live Tableau embed adds an interactive data component to the page, which is one of the required elements for the assignment.</p>
+            <div class="tableauPlaceholder" id="viz1744669953704">
+                <noscript>
+                    <a href="https://public.tableau.com/views/RegionalSampleWorkbook/College">View the Tableau visualization</a>
+                </noscript>
+                <object class="tableauViz">
+                    <param name="host_url" value="https%3A%2F%2Fpublic.tableau.com%2F" />
+                    <param name="embed_code_version" value="3" />
+                    <param name="site_root" value="" />
+                    <param name="name" value="RegionalSampleWorkbook/College" />
+                    <param name="tabs" value="no" />
+                    <param name="toolbar" value="yes" />
+                    <param name="showVizHome" value="no" />
+                </object>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        const divElement = document.getElementById("viz1744669953704");
+        const vizElement = divElement.getElementsByTagName("object")[0];
+        vizElement.style.width = "100%";
+        vizElement.style.height = "827px";
+        const scriptElement = document.createElement("script");
+        scriptElement.src = "https://public.tableau.com/javascripts/api/viz_v1.js";
+        vizElement.parentNode.insertBefore(scriptElement, vizElement);
+    </script>
+</body>
+</html>
