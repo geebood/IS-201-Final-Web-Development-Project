@@ -3,221 +3,516 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trail Day Planner</title>
+    <title>Snake Game</title>
     <style>
         :root {
-            color-scheme: light;
-            --bg: #f4efe6;
-            --panel: #fffaf3;
-            --ink: #21323f;
-            --accent: #b35c2e;
-            --accent-dark: #7c3c1d;
-            --line: #dbcdb8;
+            --bg: #0e1b16;
+            --panel: #15271f;
+            --panel-2: #1d3329;
+            --line: #335544;
+            --text: #ecf7f0;
+            --muted: #b2cabd;
+            --accent: #7ddf64;
+            --accent-2: #f2bf5e;
+            --danger: #ef6f6c;
         }
-        * { box-sizing: border-box; }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
-            font-family: Georgia, "Times New Roman", serif;
-            color: var(--ink);
-            background:
-                radial-gradient(circle at top left, rgba(179, 92, 46, 0.22), transparent 32%),
-                linear-gradient(180deg, #f9f4eb 0%, #efe5d4 100%);
             min-height: 100vh;
+            font-family: "Trebuchet MS", Arial, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top, rgba(125, 223, 100, 0.16), transparent 30%),
+                linear-gradient(180deg, #102019 0%, #09120f 100%);
         }
-        .app-shell {
-            width: min(960px, calc(100% - 2rem));
+
+        .page {
+            width: min(1100px, calc(100% - 1.5rem));
             margin: 0 auto;
-            padding: 2rem 0 3rem;
+            padding: 1.5rem 0 2.5rem;
         }
-        .app-header,
-        .app-panel,
-        .results-panel {
-            background: var(--panel);
+
+        .hero,
+        .board-card,
+        .sidebar-card,
+        .controls-card {
+            background: rgba(21, 39, 31, 0.94);
             border: 1px solid var(--line);
-            border-radius: 20px;
-            box-shadow: 0 18px 45px rgba(33, 50, 63, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 20px 48px rgba(0, 0, 0, 0.28);
         }
-        .app-header {
-            padding: 2rem;
-            margin-bottom: 1.5rem;
+
+        .hero {
+            padding: 1.6rem;
+            margin-bottom: 1.25rem;
         }
-        .app-header h1 {
-            margin: 0 0 0.75rem;
-            font-size: clamp(2rem, 4vw, 3.5rem);
+
+        .eyebrow {
+            margin: 0 0 0.5rem;
+            color: var(--accent-2);
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            font-size: 0.8rem;
+            font-weight: 700;
         }
-        .app-header p {
-            margin: 0.5rem 0;
+
+        h1,
+        h2 {
+            font-family: Georgia, "Times New Roman", serif;
+            margin-top: 0;
+        }
+
+        h1 {
+            margin-bottom: 0.65rem;
+            font-size: clamp(2.25rem, 5vw, 4rem);
+        }
+
+        .hero p {
+            color: var(--muted);
             line-height: 1.7;
+            max-width: 760px;
         }
-        .nav-link {
-            display: inline-block;
+
+        .hero-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
             margin-top: 1rem;
-            color: var(--accent-dark);
-            font-weight: 700;
+        }
+
+        .hero-links a {
             text-decoration: none;
-        }
-        .planner-grid {
-            display: grid;
-            gap: 1.5rem;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        }
-        .app-panel,
-        .results-panel {
-            padding: 1.5rem;
-        }
-        label {
-            display: block;
-            font-weight: 700;
-            margin-bottom: 0.45rem;
-        }
-        input,
-        select {
-            width: 100%;
-            padding: 0.85rem 0.9rem;
+            color: var(--text);
+            background: var(--panel-2);
             border: 1px solid var(--line);
-            border-radius: 12px;
-            background: #fff;
-            margin-bottom: 1rem;
-            font: inherit;
-            color: var(--ink);
+            border-radius: 999px;
+            padding: 0.75rem 1rem;
+            font-weight: 700;
         }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0, 720px) 320px;
+            gap: 1.25rem;
+        }
+
+        .board-card {
+            padding: 1.2rem;
+        }
+
+        canvas {
+            width: 100%;
+            max-width: 680px;
+            aspect-ratio: 1 / 1;
+            display: block;
+            margin: 0 auto;
+            background:
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                #0c1612;
+            background-size: 5% 5%;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+        }
+
+        .sidebar {
+            display: grid;
+            gap: 1.25rem;
+        }
+
+        .sidebar-card,
+        .controls-card {
+            padding: 1.2rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .stat {
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 0.9rem;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 0.88rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .status {
+            margin-top: 1rem;
+            padding: 0.95rem 1rem;
+            border-radius: 16px;
+            background: rgba(125, 223, 100, 0.12);
+            border: 1px solid rgba(125, 223, 100, 0.25);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .controls-list {
+            margin: 0;
+            padding-left: 1.25rem;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
         button {
             border: 0;
             border-radius: 999px;
-            background: var(--accent);
-            color: #fff;
-            padding: 0.9rem 1.25rem;
+            padding: 0.8rem 1.05rem;
             font: inherit;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
+            color: #102019;
+            background: var(--accent);
         }
-        .result-card {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: 14px;
-            background: #fff;
-            border: 1px solid var(--line);
+
+        button.secondary {
+            background: var(--accent-2);
         }
-        .result-card h3 {
-            margin-top: 0;
+
+        .note {
+            color: var(--muted);
+            line-height: 1.6;
         }
-        .pill-row {
+
+        .legend {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.6rem;
+            gap: 0.8rem;
             margin-top: 1rem;
         }
-        .pill {
-            padding: 0.45rem 0.8rem;
-            border-radius: 999px;
-            background: #efe1d1;
-            color: var(--accent-dark);
-            font-weight: 700;
+
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--muted);
+            font-size: 0.92rem;
         }
-        @media (max-width: 640px) {
-            .app-shell {
-                width: min(100% - 1rem, 960px);
-            }
-            .app-header,
-            .app-panel,
-            .results-panel {
-                padding: 1.2rem;
+
+        .swatch {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+        }
+
+        @media (max-width: 920px) {
+            .layout {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <div class="app-shell">
-        <div class="app-header">
-            <p>Interactive Web App</p>
-            <h1>Trail Day Planner</h1>
-            <p>This single-page app helps plan a mountain outing. Pick your conditions and it will suggest a trip style, energy level, and a simple packing list.</p>
-            <a class="nav-link" href="fromScratch.html">Back to the scratch page</a>
-        </div>
-        <div class="planner-grid">
-            <div class="app-panel">
-                <label for="distance">Distance in miles</label>
-                <input id="distance" type="number" min="1" max="25" value="6" />
-                <label for="elevation">Elevation gain in feet</label>
-                <input id="elevation" type="number" min="0" max="6000" value="1200" />
-                <label for="weather">Weather</label>
-                <select id="weather">
-                    <option value="clear">Clear</option>
-                    <option value="windy">Windy</option>
-                    <option value="hot">Hot</option>
-                    <option value="cold">Cold</option>
-                </select>
-                <label for="goal">Main goal</label>
-                <select id="goal">
-                    <option value="photos">Scenic photos</option>
-                    <option value="fitness">Fitness challenge</option>
-                    <option value="quiet">Quiet reset</option>
-                    <option value="friends">Trip with friends</option>
-                </select>
-                <button id="generatePlan" type="button">Generate plan</button>
+    <div class="page">
+        <section class="hero">
+            <p class="eyebrow">Interactive Web App</p>
+            <h1>Snake: Alpine Edition</h1>
+            <p>
+                This one-page game turns the app requirement into something more playful and clearly interactive. Guide the
+                snake across the board, collect food, and avoid crashing into the walls or yourself. The speed increases as
+                your score grows.
+            </p>
+            <div class="hero-links">
+                <a href="fromScratch.html">Back to the scratch page</a>
+                <a href="index.html">Return to the professional site</a>
             </div>
-            <div class="results-panel">
-                <h2>Suggested Plan</h2>
-                <div id="planOutput" class="result-card">
-                    <h3>Ready when you are</h3>
-                    <p>Choose your trip settings, then generate a plan to see your recommended adventure style.</p>
+        </section>
+
+        <section class="layout">
+            <div class="board-card">
+                <canvas id="gameBoard" width="600" height="600" aria-label="Snake game board"></canvas>
+                <div class="legend">
+                    <span class="legend-item"><span class="swatch" style="background:#7ddf64"></span> Snake</span>
+                    <span class="legend-item"><span class="swatch" style="background:#f2bf5e"></span> Food</span>
+                    <span class="legend-item"><span class="swatch" style="background:#ef6f6c"></span> Danger</span>
                 </div>
             </div>
-        </div>
+
+            <div class="sidebar">
+                <div class="sidebar-card">
+                    <h2>Game Stats</h2>
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-label">Score</div>
+                            <div class="stat-value" id="score">0</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Best</div>
+                            <div class="stat-value" id="bestScore">0</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Length</div>
+                            <div class="stat-value" id="length">3</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Speed</div>
+                            <div class="stat-value" id="speed">1x</div>
+                        </div>
+                    </div>
+                    <div class="status" id="statusMessage">Press Start or hit the space bar to begin.</div>
+                </div>
+
+                <div class="controls-card">
+                    <h2>Controls</h2>
+                    <ol class="controls-list">
+                        <li>Use the arrow keys or WASD to move.</li>
+                        <li>Press the space bar to start or pause.</li>
+                        <li>Collect food to grow and increase your score.</li>
+                        <li>Avoid the walls and your own tail.</li>
+                    </ol>
+                    <div class="button-row">
+                        <button id="startButton" type="button">Start / Pause</button>
+                        <button id="resetButton" class="secondary" type="button">Reset Game</button>
+                    </div>
+                    <p class="note">
+                        The game is intentionally all in one file so it fits the assignment requirement for a compact,
+                        self-contained web app.
+                    </p>
+                </div>
+            </div>
+        </section>
     </div>
+
     <script>
-        const button = document.getElementById("generatePlan");
-        const output = document.getElementById("planOutput");
-        function classifyEffort(distance, elevation) {
-            const score = distance * 1.2 + elevation / 800;
-            if (score < 8) return "Easy-going";
-            if (score < 14) return "Moderate";
-            return "High effort";
+        const board = document.getElementById("gameBoard");
+        const ctx = board.getContext("2d");
+        const scoreEl = document.getElementById("score");
+        const bestScoreEl = document.getElementById("bestScore");
+        const lengthEl = document.getElementById("length");
+        const speedEl = document.getElementById("speed");
+        const statusEl = document.getElementById("statusMessage");
+        const startButton = document.getElementById("startButton");
+        const resetButton = document.getElementById("resetButton");
+
+        const gridSize = 20;
+        const tileCount = board.width / gridSize;
+        let bestScore = 0;
+        let animationId = null;
+        let lastTick = 0;
+
+        const state = {
+            running: false,
+            gameOver: false,
+            tickDelay: 150,
+            score: 0,
+            direction: { x: 1, y: 0 },
+            nextDirection: { x: 1, y: 0 },
+            snake: [],
+            food: { x: 10, y: 10 }
+        };
+
+        function resetGame() {
+            state.running = false;
+            state.gameOver = false;
+            state.tickDelay = 150;
+            state.score = 0;
+            state.direction = { x: 1, y: 0 };
+            state.nextDirection = { x: 1, y: 0 };
+            state.snake = [
+                { x: 5, y: 10 },
+                { x: 4, y: 10 },
+                { x: 3, y: 10 }
+            ];
+            placeFood();
+            updateStats();
+            statusEl.textContent = "Fresh board ready. Press Start or the space bar to play.";
+            draw();
         }
-        function weatherTip(weather) {
-            const tips = {
-                clear: "Pack water, sunglasses, and time for a longer summit break.",
-                windy: "Bring a shell layer and expect exposed sections to feel colder.",
-                hot: "Start early, carry extra water, and look for shaded stops.",
-                cold: "Add gloves and a warm layer, especially if you'll stop for photos."
+
+        function placeFood() {
+            let valid = false;
+            while (!valid) {
+                const candidate = {
+                    x: Math.floor(Math.random() * tileCount),
+                    y: Math.floor(Math.random() * tileCount)
+                };
+                valid = !state.snake.some((segment) => segment.x === candidate.x && segment.y === candidate.y);
+                if (valid) {
+                    state.food = candidate;
+                }
+            }
+        }
+
+        function updateStats() {
+            scoreEl.textContent = state.score;
+            bestScoreEl.textContent = bestScore;
+            lengthEl.textContent = state.snake.length;
+            const speedMultiplier = (150 / state.tickDelay).toFixed(1).replace(".0", "");
+            speedEl.textContent = `${speedMultiplier}x`;
+        }
+
+        function drawCell(x, y, color, radius = 6) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.roundRect(x * gridSize + 2, y * gridSize + 2, gridSize - 4, gridSize - 4, radius);
+            ctx.fill();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, board.width, board.height);
+
+            ctx.fillStyle = "#0c1612";
+            ctx.fillRect(0, 0, board.width, board.height);
+
+            for (let y = 0; y < tileCount; y += 1) {
+                for (let x = 0; x < tileCount; x += 1) {
+                    if ((x + y) % 2 === 0) {
+                        ctx.fillStyle = "rgba(255,255,255,0.025)";
+                        ctx.fillRect(x * gridSize, y * gridSize, gridSize, gridSize);
+                    }
+                }
+            }
+
+            drawCell(state.food.x, state.food.y, "#f2bf5e", 10);
+
+            state.snake.forEach((segment, index) => {
+                const color = index === 0 ? "#9cf57e" : "#7ddf64";
+                drawCell(segment.x, segment.y, color, index === 0 ? 10 : 6);
+            });
+
+            if (state.gameOver) {
+                ctx.fillStyle = "rgba(0,0,0,0.55)";
+                ctx.fillRect(0, 0, board.width, board.height);
+                ctx.fillStyle = "#ffffff";
+                ctx.textAlign = "center";
+                ctx.font = "bold 42px Georgia";
+                ctx.fillText("Game Over", board.width / 2, board.height / 2 - 10);
+                ctx.font = "20px Trebuchet MS";
+                ctx.fillText("Press Reset to play again", board.width / 2, board.height / 2 + 30);
+            }
+        }
+
+        function changeDirection(x, y) {
+            if (state.direction.x === -x && state.direction.y === -y && state.running) {
+                return;
+            }
+            state.nextDirection = { x, y };
+        }
+
+        function endGame() {
+            state.running = false;
+            state.gameOver = true;
+            bestScore = Math.max(bestScore, state.score);
+            updateStats();
+            statusEl.textContent = "Crash. Reset the board and see if you can beat your best score.";
+            draw();
+        }
+
+        function step() {
+            state.direction = state.nextDirection;
+            const newHead = {
+                x: state.snake[0].x + state.direction.x,
+                y: state.snake[0].y + state.direction.y
             };
-            return tips[weather];
+
+            const hitWall =
+                newHead.x < 0 ||
+                newHead.y < 0 ||
+                newHead.x >= tileCount ||
+                newHead.y >= tileCount;
+
+            const hitSelf = state.snake.some((segment) => segment.x === newHead.x && segment.y === newHead.y);
+
+            if (hitWall || hitSelf) {
+                endGame();
+                return;
+            }
+
+            state.snake.unshift(newHead);
+
+            if (newHead.x === state.food.x && newHead.y === state.food.y) {
+                state.score += 10;
+                state.tickDelay = Math.max(70, state.tickDelay - 5);
+                bestScore = Math.max(bestScore, state.score);
+                statusEl.textContent = "Nice. The snake got longer and the game sped up.";
+                placeFood();
+            } else {
+                state.snake.pop();
+            }
+
+            updateStats();
+            draw();
         }
-        function goalStyle(goal) {
-            const styles = {
-                photos: "Choose a route with overlooks and leave space in the schedule for stops.",
-                fitness: "Keep the pace steady and treat the climb as the main challenge.",
-                quiet: "Look for less crowded trails and plan a slower, more reflective outing.",
-                friends: "Use a moderate route with scenic breaks and a clear turnaround time."
-            };
-            return styles[goal];
+
+        function gameLoop(timestamp) {
+            if (!state.running) {
+                animationId = requestAnimationFrame(gameLoop);
+                return;
+            }
+
+            if (!lastTick) {
+                lastTick = timestamp;
+            }
+
+            if (timestamp - lastTick >= state.tickDelay) {
+                lastTick = timestamp;
+                step();
+            }
+
+            animationId = requestAnimationFrame(gameLoop);
         }
-        function buildPackingList(weather, goal) {
-            const base = ["Water", "Trail snacks", "Phone", "Sun protection"];
-            if (weather === "windy" || weather === "cold") base.push("Extra layer");
-            if (weather === "hot") base.push("Electrolytes");
-            if (goal === "photos") base.push("Camera or tripod");
-            if (goal === "friends") base.push("Shared map or group plan");
-            return base;
+
+        function toggleRunning() {
+            if (state.gameOver) {
+                return;
+            }
+            state.running = !state.running;
+            statusEl.textContent = state.running
+                ? "Game on. Stay ahead of the walls and your own tail."
+                : "Paused. Press Start or the space bar to continue.";
+            if (state.running) {
+                lastTick = 0;
+            }
         }
-        button.addEventListener("click", () => {
-            const distance = Number(document.getElementById("distance").value);
-            const elevation = Number(document.getElementById("elevation").value);
-            const weather = document.getElementById("weather").value;
-            const goal = document.getElementById("goal").value;
-            const effort = classifyEffort(distance, elevation);
-            const list = buildPackingList(weather, goal);
-            const daylightHours = Math.max(3, Math.round(distance / 2 + elevation / 1400 + 2));
-            output.innerHTML = `
-                <h3>${effort} mountain day</h3>
-                <p>${goalStyle(goal)}</p>
-                <p>${weatherTip(weather)}</p>
-                <p>Recommended time block: about ${daylightHours} hours including breaks.</p>
-                <div class="pill-row">
-                    ${list.map((item) => `<span class="pill">${item}</span>`).join("")}
-                </div>
-            `;
+
+        window.addEventListener("keydown", (event) => {
+            const key = event.key.toLowerCase();
+
+            if (["arrowup", "arrowdown", "arrowleft", "arrowright", " ", "w", "a", "s", "d"].includes(key)) {
+                event.preventDefault();
+            }
+
+            if (key === "arrowup" || key === "w") changeDirection(0, -1);
+            if (key === "arrowdown" || key === "s") changeDirection(0, 1);
+            if (key === "arrowleft" || key === "a") changeDirection(-1, 0);
+            if (key === "arrowright" || key === "d") changeDirection(1, 0);
+            if (key === " ") toggleRunning();
         });
+
+        startButton.addEventListener("click", toggleRunning);
+        resetButton.addEventListener("click", () => {
+            resetGame();
+        });
+
+        resetGame();
+        if (!animationId) {
+            animationId = requestAnimationFrame(gameLoop);
+        }
     </script>
 </body>
 </html>
