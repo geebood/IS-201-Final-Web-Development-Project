@@ -104,14 +104,14 @@ h2 {
 }
 
 .photo-card img {
-    width: 100%;
+    width: calc(100% - 1.5rem);
+    max-width: 100%;
     display: block;
     border-radius: 18px;
-    margin-bottom: 1rem;
+    margin: 0.75rem auto 1rem;
     border: 1px solid rgba(19, 50, 69, 0.1);
     background: linear-gradient(180deg, #eef6fb 0%, #fff7ea 100%);
     padding: 0.75rem;
-    margin-top: 0.75rem;
 }
 
 ol,
